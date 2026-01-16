@@ -1,0 +1,11 @@
+/emotion
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.env/
+.ipynb_checkpoints/
+emotion_model/
+models/
