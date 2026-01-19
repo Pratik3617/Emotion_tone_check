@@ -2,11 +2,11 @@ from typing import Dict
 import torch
 from pathlib import Path
 import json
-from model_loader import (
+from inference.model_loader import (
     get_model, get_tokenizer, get_device
 )
 
-LABELS_PATH = Path("../config/emotion_labels.json")
+LABELS_PATH = Path("config/emotion_labels.json")
 
 with open(LABELS_PATH, "r") as f:
     EMOTION_LABELS = json.load(f)

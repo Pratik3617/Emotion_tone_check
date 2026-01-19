@@ -1,4 +1,4 @@
-from text_normalizer import normalize_text
+from logic.text_normalizer import normalize_text
 from typing import Dict
 
 # Emotion → risk contribution
@@ -39,7 +39,7 @@ def disagreement_discount(text: str) -> float:
     text = normalize_text(text)
     return 0.7 if any(k in text for k in SOFT_DISAGREEMENT_PHRASES) else 1.0
 
-def compute_risk(emotion_scores: Dict[str, float], text: str) -> float:
+def compute_risk_score(emotion_scores: Dict[str, float], text: str) -> float:
     """
     Compute continuous risk score
     """
