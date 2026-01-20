@@ -31,6 +31,16 @@ def analyze_tone(text: str) -> Dict[str, Optional[object]]:
     # buisness rule override 
     final_risk_level = override_risk_level_for_soft_disagreement(intial_risk_level, text)
 
+    # assign flags
+    flags = []
+    if final_risk_level == "high":
+        flags.append("urgent_review")
+    if final_risk_level in ("medium", "high"):
+        flags.append("tone_sensitive")
+
+    requires_attention = final_risk_level != "low"
+
+
     # rewrite suggestions
     rewrite = suggest_rewrite(tone, final_risk_level)
 
@@ -42,5 +52,7 @@ def analyze_tone(text: str) -> Dict[str, Optional[object]]:
         },
         "risk_score": round(float(risk_score), 3),
         "risk_level": final_risk_level,
-        "suggestion_rewrite": rewrite
+        "suggested_rewrite": rewrite,
+        "flags": flags,
+        "requires_attention": requires_attention
     }
