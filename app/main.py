@@ -15,6 +15,7 @@ def health_check():
 
 @app.post("/analyze-tone", 
     response_model=AnalyzeToneResponse, 
+    response_model_exclude_none=True,
     summary="Analyze emotional tone and communication risk",
     description="Detects tone, evaluates risk, and suggests safer rewrites"
 )
@@ -26,7 +27,7 @@ def analyze_tone_endpoint(
     try:
         result = analyze_tone(request.text)
         if not include_scores:
-            result.pop("tone_scores")
+            result.pop("tone_scores", None)
         return result
     except ValidationError as e:
         raise HTTPException(status_code=422, detail=e.errors())
