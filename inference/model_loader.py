@@ -3,7 +3,7 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from pathlib import Path
 
 # saved model checkpoint path
-MODEL_DIR = Path("models/emotion_model/checkpoint-2714")
+MODEL_DIR = Path("models/emotion_model")
 
 _MODEL = None
 _TOKENIZER = None
