@@ -3,7 +3,7 @@ from inference.predictor import predict_emotions
 from logic.tone_aggregator import aggregate_tone
 from logic.risk_scorer import compute_risk_score, risk_level, override_risk_level_for_soft_disagreement
 from logic.rewrite_engine import suggest_rewrite
-from logging.logger import setup_logger
+from app_logging.logger import setup_logger
 
 logger = setup_logger()
 
@@ -18,7 +18,7 @@ def analyze_tone(text: str) -> Dict[str, Optional[object]]:
         dict: Analysis result containing tone, risk, and rewrite
     """
     logger.debug("Starting tone analysis pipeline")
-    
+
     if not text or not isinstance(text, str):
         raise ValueError("Input text must be a non-empty string")
     
@@ -47,7 +47,7 @@ def analyze_tone(text: str) -> Dict[str, Optional[object]]:
 
 
     # rewrite suggestions
-    rewrite = suggest_rewrite(tone, final_risk_level)
+    rewrite = rewrite = suggest_rewrite(text, tone, final_risk_level)
 
     return{
         "input_text": text,

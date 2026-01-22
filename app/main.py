@@ -3,7 +3,7 @@ from app.schemas import AnalyzeToneRequest, AnalyzeToneResponse
 from inference.pipeline import analyze_tone
 from pydantic import ValidationError
 import time
-from logging.logger import setup_logger
+from app_logging.logger import setup_logger
 
 logger = setup_logger()
 

@@ -1,24 +1,42 @@
 from typing import Optional
+from llm.rewrite_generator import generate_rewrite
 
-
-REWRITE_RULES = {
-    ("negative", "low"): "Just checking in on this.",
+TEMPLATE_REWRITES = {
     ("negative", "medium"): "Could you please share an update on this?",
     ("negative", "high"): "I might be mistaken, but could we review this together?",
-
-    ("neutral", "low"): None,  # No rewrite needed
-    ("neutral", "medium"): "Just checking in on this.",
-    ("neutral", "high"): "Could you please share an update on this?",
-
-    ("positive", "low"): None,  # No rewrite needed
-    ("positive", "medium"): "Thanks for the update!",
-    ("positive", "high"): "Thanks for the update!",
 }
 
 
-def suggest_rewrite(tone: str, risk_level: str) -> Optional[str]:
+def suggest_rewrite(text: str, tone: str, risk_level: str) -> Optional[str]:
     """
-    Suggest a safer rewrite based on tone and risk.
-    Returns None if no rewrite is required.
+    Hybrid rewrite engine:
+    - Low risk → no rewrite
+    - Medium risk → LLM (fallback to template)
+    - High risk → LLM (fallback to template)
     """
-    return REWRITE_RULES.get((tone, risk_level))
+
+    if risk_level == "low":
+        return None
+
+    # LLM for medium & high risk
+    if risk_level in ("medium", "high"):
+        try:
+            rewrite = generate_rewrite(text)
+
+            # Safety check: empty or nonsense output
+            if not rewrite or len(rewrite.strip()) < 5:
+                raise ValueError("Invalid LLM rewrite")
+
+            return rewrite
+
+        except Exception:
+            # Safe deterministic fallback
+            return TEMPLATE_REWRITES.get(
+                (tone, risk_level),
+                TEMPLATE_REWRITES.get(
+                    (tone, "medium"),
+                    "Could you please share an update on this?",
+                ),
+            )
+
+    return None

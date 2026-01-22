@@ -5,7 +5,7 @@ def setup_logger(name: str = "emotion_tone_service") -> logging.Logger:
     """
     Configure and return a logger instance.
     """
-    logger = logging.getLogger(name)
+    logger = logging.getLogger(name=name)
     logger.setLevel(logging.INFO)
 
     # prevent duplicate logs
